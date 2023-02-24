@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='bootstrap/css/bootstrap.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='fontawesome/css/all.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/admin.css')}}">
+    {% block title%}
+    <title>Admin Login</title>
+    {% endblock %}
+</head>
+<body>
+  {% block party%}
+    <div class="login">
+      <h1>
+        Login
+    </h1>
+    {% with m=get_flashed_messages(with_categories=True) %}
+      {% if m: %}
+        {% for cat,msg in m: %}
+                <div class='alert alert-danger'> {{ msg|safe }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+      <form method="post" action="">
+        <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+        <div class="txt_field">
+          <input type="text" name="username" required>
+          <span></span>
+          <label>Username</label>
+        </div>
+
+        <div class="txt_field">
+          <input type="password" name="pwd" required>
+          <span></span>
+          <label>Password</label>
+        </div>
+
+        <div class="pass">Forgot Password?</div>
+        <input type="submit" value="Login">
+        <div class="signup_link">
+          Not a member? <a href="#">Signup</a>
+        </div>
+
+      </form>
+    </div>
+    {% endblock %}
+    <script src="{{url_for('static',filename='assets/jquery.min.js')}}"> </script>
+    {% block customjs %}
+
+{% endblock %}
+</body>
+</html>

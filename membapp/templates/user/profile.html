@@ -1,0 +1,93 @@
+{% extends "user/home_layout.html"%}
+  
+{% block content %}
+<div class="content" style="background-color: white;padding:3em">
+    {% with m=get_flashed_messages(with_categories=True) %}
+    {% if m: %}
+      {% for cat,msg in m: %}
+              <div class='alert alert-success'> {{ msg|safe }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+    <h3>My profile</h3>
+
+    <form method="post" action="">
+        <div class="form-group row mb-3">
+            <label class="col-md-3">state of residence</label>
+            <div class="col-md-4">
+                <select name="myparty" id="myparty" class="form-control border-success">
+                    {% for p in allparties:%}
+                        {% if p.party_id == deets.user_partyid%}
+                            <option value="{{p.party_id}}" selected>{{ p.party_name}}</option>
+                        {% else %}
+                            <option value="{{p.party_id}}">{{ p.party_name}}</option>
+                        {% endif %}
+                    {% endfor%}
+                </select>
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <label class="col-md-3">Fullname</label>
+            <div class="col-md-4">
+                <input type="text" class="form-control border-success" name="fullname" value="{{ deets.user_fullname}}">
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <label class="col-md-3">Email</label>
+            <div class="col-md-4">
+                {{ deets.user_email }}
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <label class="col-md-3">Phone Number</label>
+            <div class="col-md-4">
+                <input type="text" class="form-control border-success" name="phone" value="{{ deets.user_phone}}">
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <label class="col-md-3">state of residence</label>
+            <div class="col-md-4">
+                <select name="state" id="state" class="form-control border-success">
+                    <option value="">Please select</option>
+                    {% for x in state_deets:%}
+                    <option value="{{x.state_id}}">{{ x.state_name}}</option>
+                    {% endfor%}
+                </select>
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <label class="col-md-3">local gov area</label>
+            <div class="col-md-4" id="mylga">
+                
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <button class="btn btn-success col-3 ms-5">Update Record</button>
+        </div>
+    </form>
+  <p>This is your dashboard, please use the second-level menu to carry out tasks</p>
+ </div>
+ 
+{% endblock %}
+
+{% block customjs %}
+ <script>
+    $(document).ready(function(){
+        $('#state').change(function(){
+            
+            var stateid = $(this).val()
+            $.ajax({
+                url:"/load_lga/" +stateid,
+                type:"GET",
+                success:function(rsp){
+                    $("#mylga").html(rsp)
+                },
+                error:function(e){
+                    console.log(e)
+                }
+            })
+        })
+    })
+ </script>
+
+ {% endblock %}

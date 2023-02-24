@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='bootstrap/css/bootstrap.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/index.css')}}">
+    <link href="{{ url_for('static',filename='fontawesome/css/all.css')}}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" defer src="{{ url_for('static',filename='bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <title>Bootstrap 5 Responsive Admin Dashboard</title>
+</head>
+
+<body>
+    <div class="d-flex" id="wrapper">
+        
+        <div class="bg-white" id="sidebar-wrapper">
+            <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom" style="color: #008753;">
+                <img src="{{ url_for('static',filename ='images/42c92cb8-fc29-42c7-b1e2-38971e84f946-removebg-preview.png')}}" alt="">
+                MEMBER
+            </div>
+
+            <div class="list-group list-group-flush my-3">
+                    {% include "admin/menu.html"%}
+            </div>
+        </div>
+
+
+       
+        <div id="page-content-wrapper">
+            
+            <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
+                    <h2 class="fs-2 m-0" style="color: #008753;">Dashboard</h2>
+                </div>
+            </nav>
+            
+            <div class="container-fluid px-4">
+                <div class="row g-3 my-2" style="color: #008753;">
+
+                    {% block party%}
+                    {{topicid}}
+                    {% with m=get_flashed_messages(with_categories=False)%}
+                            {% if m %}
+                                {% for msg in m%}
+                               <div class="alert  alert-success">{{msg|safe}}</div> 
+                               {% endfor %}
+                            {% endif%}
+                            {% endwith %}
+                        <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
+                            <table  class="table table-stripped">
+                                <thead>
+                                <tr>
+                                   <th>S/N</th>
+                                   <th>Title</th>
+                                   <th>User</th>
+                                   <th>Status</th>
+                                   <th >Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for x in query%}
+                                <tr>
+                                   <td>{{ loop.index }}</td>
+                                   <td>{{ x.topic_title[0:100]}}</td>
+                                   <td>{{ x.userdeets.user_fullname}}</td>
+                                   <td>
+                                        {% if x.topic_status == '1': %}
+                                            <span class="badge bg-success">Approved</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Pending
+                                            </span>                                    
+                                        {% endif %}
+                                   </td>
+                                   <td>
+                                    <a href="{{url_for('edit_topic',id=x.topic_id)}}" class="btn btn-success"><i class="fa fa-edit"></i>Edit</a>
+
+                                    <a href="{{url_for('delete_post',id=x.topic_id)}}" class="btn btn-outline-danger" onclick="return confirm('Do you really want to delete')"><i class="fa fa-trash">delete</i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                              </table>
+                            </tbody>
+
+                        </div>
+                       
+                
+
+                    
+                    {% endblock %}
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+    
+   
+
+    <script src="{{ url_for('static',filename='bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script>
+        var el = document.getElementById("wrapper");
+        var toggleButton = document.getElementById("menu-toggle");
+
+        toggleButton.onclick = function () {
+            el.classList.toggle("toggled");
+        };
+    </script>
+</body>
+
+</html>

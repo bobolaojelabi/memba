@@ -1,0 +1,82 @@
+{% extends "admin/adminlogin.html" %}
+{% block title%}
+<title>User Reg</title>
+{% endblock %}
+{% block party %}
+<div class="login">
+    <h1>
+      User Registration
+  </h1>
+  {% with m=get_flashed_messages(with_categories=True) %}
+  {% if m: %}
+    {% for cat,msg in m: %}
+            <div class='alert alert-danger'> {{ msg|safe }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+    <form method="post" action="{{url_for('register')}}">
+      <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+      <small id="small"></small>
+      <div class="txt_field">
+        <input type="email" name="email" id="emails">
+        <span></span>
+        <label>Email</label>
+
+      </div>
+
+      <div class="txt_field">
+        <input type="password" name="pwd" id="pwd">
+        <span></span>
+        <label>Password</label>
+      </div>
+
+      <div class="txt_field">
+
+        <select class="form-select" name="partyid">
+            <option value="">select a party</option>
+            {% for p in party%}
+            <option value="{{p.party_id}}">{{p.party_name}}</option>
+            {% endfor %}
+        </select>
+        <span></span>
+      </div>
+
+      
+      <input type="submit" value="Signup">
+      <div class="signup_link">
+        A member? <a href="#">Signin</a>
+      </div>
+
+    </form>
+  </div>
+{% endblock%}
+{% block customjs %}
+  <script>
+    $(document).ready(function(){
+      $('#emails').change(function(){
+        var email = $(this).val()
+        var csrf = "{{csrf_token()}}"
+        var data2send ={"email":email,"csrf_token":csrf}
+        //ajax call
+        $.ajax({
+          url:"/check_username",
+          data:data2send,
+          type:"POST",
+          dataType:"json",
+          success:function(rsp){
+            $('small').html(rsp['feedback'])
+            $('#small').removeClass('text-success text-danger')
+            if(rsp['status']==1){
+              $("#small").addClass('text-success')
+            }else{
+              $("#small").addClass('text-danger')
+            }
+          },
+          error:function(e){
+            console.log(e)
+          }
+        })
+      })
+    })
+  </script>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "user/home_layout.html"%}
+  
+{% block content %}
+<div class="content" style="background-color: white;padding:3em">
+ {{ rsp }}
+ <table  class="table table-stripped">
+   <tr>
+      <th>S/N</th>
+      <th>PARTY</th>
+      <th>PARTY SHORTCODE</th>
+      <th>TOTAL NUMBER</th>
+   </tr>
+
+   {% for r in rsp%}
+   <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ r.party_name}}</td>
+      <td>{{ r.party_shortcode}}</td>
+      <td>{{ r.users|count}}</td>
+   </tr>
+   {% endfor %}
+ </table>
+
+ </div>
+ 
+{% endblock %}

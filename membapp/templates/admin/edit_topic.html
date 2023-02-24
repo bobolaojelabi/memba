@@ -1,0 +1,58 @@
+{% extends "admin/alltopics.html"%}
+{% block party%}
+<div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
+    <article>
+        <p>{{topic_deets.topic_title}}</p>
+
+   
+        <p>User: {{ topic_deets.userdeets.user_fullname }}</p>
+        <p>Date: {{ topic_deets.topic_date}}</p>
+
+    
+        <form action="/admin/update_topic" method="post">
+            <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+            <p>
+                <input type="hidden" name="topicid" value="{{topic_deets.topic_id}}">
+                <select name="status">
+                    <option value="1">Publish</option>
+                    <option value="0">unpublish</option>
+                </select>
+
+            </p>
+            <p>
+                <button class="btn btn-outline-success">Submit</button>
+            </p>
+        </form>
+    </article>
+</div>
+
+
+{% endblock %}
+
+
+
+<div class="row border-bottom"><!--row1-->
+    <div class="col">
+        <h3>{{product_deets.product_name}}</h3>
+    </div>
+</div><!--row1 close-->
+<div class="row"><!--row2-->
+    <div class="col-md-3 border-end">
+        <h3>BRIEF </h3>
+        <p>{{product_deets.product_desc}}</p>
+        <div class="mt-5">
+            <input type="number" class="form-control border-warning" placeholder="qantity">
+            <button class="btn btn-outline-warning">Add To Cart</button>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <diV class="row">
+            {% for i in img %}
+            <div class="col-md-4 mb-3">
+                <img src="{{url_for('static',filename='/uploads/'+ i.image_name)}}" class="card-img-top img-fluid img-thumbnail" alt="shop pic" style="height: 220px;">
+            </div>
+            {% endfor %}
+        </diV>
+    </div>
+
+</div><!--row2 close -->
